@@ -18,6 +18,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
 </head>
 <body>
     <div id="app">
@@ -88,7 +89,7 @@
                         <div class="col-md-4">
                             <ul class="list-group">
                                 <li class="list-group-item">Posts</li>
-                                <li class="list-group-item">Categories</li>
+                                <li class="list-group-item"><a href="{{ url('/categories') }}">Categories</a></li>
                             </ul>
                         </div>
                         <div class="col-md-8">
@@ -101,5 +102,15 @@
             @endauth
         </main>
     </div>
+
+    {{-- ---------- Start of Js ---------- --}}
+    <script src="{{ asset('js/jquery.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    {{-- ---------- End of Js ---------- --}}
+
+    {{-- ---------- Start of Script ---------- --}}
+    @yield('script')
+    {{-- ---------- End of Script ---------- --}}
+
 </body>
 </html>
