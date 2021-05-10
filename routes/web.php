@@ -25,3 +25,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 /* ---------- Start of Categories routes ---------- */
 Route::resource('categories', 'CategoriesController');
 /* ---------- End of Categories routes ---------- */
+
+/* ---------- Start of Posts routes ---------- */
+Route::resource('posts', 'PostsController');
+/* ---------- End of Posts routes ---------- */
