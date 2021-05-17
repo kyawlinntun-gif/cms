@@ -3,11 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Post;
+use App\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Posts\CreatePostRequest;
+use App\Http\Requests\Posts\UpdatePostRequest;
 
 class PostsController extends Controller
 {
+
+    public function __construct()
+    {
+        return $this->middleware(['verify.categories'])->only(['create', 'store']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -27,7 +35,9 @@ class PostsController extends Controller
      */
     public function create()
     {
-        return view('posts.create');
+        return view('posts.create', [
+            'categories' => Category::all()
+        ]);
     }
 
     /**
@@ -42,11 +52,13 @@ class PostsController extends Controller
         $image = $request->file('image')->store('posts');
 
         // Store the data
-        Post::create([
+        $post = Post::create([
             'title' => $request->title,
             'description' => $request->description,
             'content' => $request->content,
             'image' => $image,
+            'published_at' => $request->published_at,
+            'category_id' => $request->category_id
         ]);
 
         session()->flash('success', 'Post created successfully!');
@@ -71,9 +83,12 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+        return view('posts.create', [
+            'post' => $post,
+            'categories' => Category::all()
+        ]);
     }
 
     /**
@@ -83,9 +98,44 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdatePostRequest $request, Post $post)
     {
-        //
+        //Check the image
+        if ($request->hasFile('image')) {
+            // Store old image
+            $image_old = $post->image;
+
+            // Store the image
+            $image = $request->file('image')->store('posts');
+    
+            // Store the data
+            $postUpdate = $post->update([
+                'title' => $request->title,
+                'description' => $request->description,
+                'content' => $request->content,
+                'image' => $image,
+                'published_at' => $request->published_at,
+                'category_id' => $request->category_id
+            ]);
+
+            // Delete old image
+            if ($postUpdate) {
+                $post->deleteImage($image_old);
+            }
+        } else {
+            // Store the data
+            $post = $post->update([
+                'title' => $request->title,
+                'description' => $request->description,
+                'content' => $request->content,
+                'published_at' => $request->published_at,
+                'category_id' => $request->category_id
+            ]);
+        }
+
+        session()->flash('success', 'Post updated successfully!');
+
+        return redirect(url('/posts'));
     }
 
     /**
@@ -96,6 +146,41 @@ class PostsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $post = Post::withTrashed()->where('id', $id)->firstOrFail();
+        if ($post->trashed()) {
+            $post->deleteImage($post->image);
+            $post->forceDelete();
+            session()->flash('success', 'Post deleted successfully!');
+        } else {
+            $post->delete();
+            session()->flash('success', 'Post trashed successfully!');
+        }
+
+        return redirect(url('/posts'));
+    }
+
+    /**
+     * Display a list of all trashed posts
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function trashed()
+    {
+        $posts = Post::onlyTrashed()->get();
+
+        return view('posts.index', [
+            'posts' => $posts
+        ]);
+    }
+
+    public function restore($id)
+    {
+        $post = Post::withTrashed()->where('id', $id)->firstOrFail();
+
+        $post->restore();
+
+        session()->flash('success', 'Post restored successfully!');
+
+        return redirect(url('/posts'));
     }
 }

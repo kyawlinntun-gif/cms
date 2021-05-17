@@ -80,7 +80,7 @@ class CategoriesController extends Controller
      */
     public function update(UpdateCategoriesRequest $request, Category $category)
     {
-        $category->update(['name' => $category->name]);
+        $category->update(['name' => $request->name]);
 
         session()->flash('success', 'Category updated successfully!');
 

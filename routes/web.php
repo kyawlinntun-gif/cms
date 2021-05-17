@@ -20,12 +20,22 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
-
-/* ---------- Start of Categories routes ---------- */
-Route::resource('categories', 'CategoriesController');
-/* ---------- End of Categories routes ---------- */
-
-/* ---------- Start of Posts routes ---------- */
-Route::resource('posts', 'PostsController');
-/* ---------- End of Posts routes ---------- */
+/* ---------- Start of Middlewares ---------- */
+Route::group(['middleware' => 'auth'], function () {
+    /* ---------- End of Middlewares ---------- */
+    
+    Route::get('/home', 'HomeController@index')->name('home');
+    
+    /* ---------- Start of Categories routes ---------- */
+    Route::resource('categories', 'CategoriesController');
+    /* ---------- End of Categories routes ---------- */
+    
+    /* ---------- Start of Posts routes ---------- */
+    Route::resource('posts', 'PostsController');
+    Route::put('/posts/{post}/restore', 'PostsController@restore');
+    /* ---------- End of Posts routes ---------- */
+    
+    /* ---------- Start of Trashed ---------- */
+    Route::get('/posts/trashed', 'PostsController@trashed');
+    /* ---------- End of Trashed ---------- */
+});

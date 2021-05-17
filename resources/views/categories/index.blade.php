@@ -16,6 +16,7 @@
                 <thead>
                     <tr>
                         <th>Name</th>
+                        <th>Posts Count</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -23,6 +24,7 @@
                     @foreach ($categories as $category)
                     <tr>
                         <td>{{ $category->name }}</td>
+                        <td>{{ $category->posts->count() }}</td>
                         <td>
                             <a href="{{ url('/categories/' . $category->id . '/edit') }}"
                                 class="btn btn-info btn-sm">Edit</a>
@@ -58,6 +60,11 @@
             {{-- ---------- End of Model ---------- --}}
 
         </div>
+
+        @else
+
+            <h3 class="text-center">No categories yet</h3>
+
         @endif
     </div>
 

@@ -18,7 +18,8 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}"> --}}
+    @yield('css')
 </head>
 <body>
     <div id="app">
@@ -85,11 +86,22 @@
                     @endif
                     {{-- ---------- End of Success ---------- --}}
 
+                    {{-- ---------- Start of Error ---------- --}}
+                    @if (session()->has('error'))
+                        <div class="alert alert-danger">
+                            {{ session()->get('error') }}
+                        </div>
+                    @endif
+                    {{-- ---------- End of Error ---------- --}}
+
                     <div class="row">
                         <div class="col-md-4">
                             <ul class="list-group">
                                 <li class="list-group-item"><a href="{{ url('/posts') }}">Posts</a></li>
                                 <li class="list-group-item"><a href="{{ url('/categories') }}">Categories</a></li>
+                            </ul>
+                            <ul class="list-group mt-5">
+                                <li class="list-group-item"><a href="{{ url('/posts/trashed') }}">Trashed Posts</a></li>
                             </ul>
                         </div>
                         <div class="col-md-8">
@@ -104,8 +116,8 @@
     </div>
 
     {{-- ---------- Start of Js ---------- --}}
-    <script src="{{ asset('js/jquery.min.js') }}"></script>
-    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    {{-- <script src="{{ asset('js/jquery.min.js') }}"></script> --}}
+    {{-- <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script> --}}
     {{-- ---------- End of Js ---------- --}}
 
     {{-- ---------- Start of Script ---------- --}}

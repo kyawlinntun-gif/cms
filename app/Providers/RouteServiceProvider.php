@@ -30,7 +30,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Route::pattern('category', '[0-9]+');
+        Route::pattern('post', '[0-9]+');
 
         parent::boot();
     }
