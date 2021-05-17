@@ -13,17 +13,7 @@
         <div class="card-body">
 
             {{-- ---------- Start of Form Errors ---------- --}}
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul class="list-group">
-                        @foreach ($errors->all() as $error)
-                            <li class="list-group-item">
-                                {{ $error }}
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+            @include('partial.errors')
             {{-- ---------- End of Form Errors ---------- --}}
 
             <form action="{{ isset($post) ? url('/posts/' . $post->id) : url('/posts') }}" method="POST" enctype="multipart/form-data">
@@ -70,6 +60,22 @@
                                     @endif
                                 @endif
                                 >{{ $category->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                @endif
+                @if (!$tags->isEmpty())
+                <div class="form-group">
+                    <label for="tag_id">Tag</label>
+                    <select name="tag_id[]" id="tag_id" class="form-control" multiple>
+                        @foreach ($tags as $tag)
+                            <option value="{{ $tag->id }}"
+                                @if (isset($post))
+                                    @if (in_array($tag->id, $post->tags->pluck('id')->toArray()))
+                                        selected
+                                    @endif
+                                @endif
+                                >{{ $tag->name }}</option>
                         @endforeach
                     </select>
                 </div>

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Posts\CreatePostRequest;
 use App\Http\Requests\Posts\UpdatePostRequest;
+use App\Tag;
 
 class PostsController extends Controller
 {
@@ -36,7 +37,8 @@ class PostsController extends Controller
     public function create()
     {
         return view('posts.create', [
-            'categories' => Category::all()
+            'categories' => Category::all(),
+            'tags' => Tag::all()
         ]);
     }
 
@@ -60,6 +62,11 @@ class PostsController extends Controller
             'published_at' => $request->published_at,
             'category_id' => $request->category_id
         ]);
+
+        // Store tags
+        if ($post && $request->tag_id) {
+            $post->tags()->attach($request->tag_id);
+        }
 
         session()->flash('success', 'Post created successfully!');
 
@@ -87,7 +94,8 @@ class PostsController extends Controller
     {
         return view('posts.create', [
             'post' => $post,
-            'categories' => Category::all()
+            'categories' => Category::all(),
+            'tags' => Tag::all()
         ]);
     }
 
@@ -109,7 +117,7 @@ class PostsController extends Controller
             $image = $request->file('image')->store('posts');
     
             // Store the data
-            $postUpdate = $post->update([
+            $post->update([
                 'title' => $request->title,
                 'description' => $request->description,
                 'content' => $request->content,
@@ -118,8 +126,13 @@ class PostsController extends Controller
                 'category_id' => $request->category_id
             ]);
 
+            // Store tags
+            if ($post) {
+                $post->tags()->sync($request->tag_id);
+            }
+
             // Delete old image
-            if ($postUpdate) {
+            if ($post) {
                 $post->deleteImage($image_old);
             }
         } else {

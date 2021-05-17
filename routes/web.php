@@ -29,6 +29,10 @@ Route::group(['middleware' => 'auth'], function () {
     /* ---------- Start of Categories routes ---------- */
     Route::resource('categories', 'CategoriesController');
     /* ---------- End of Categories routes ---------- */
+
+    /* ---------- Start of Tags routes ---------- */
+    Route::resource('tags', 'TagsController');
+    /* ---------- End of Tags routes ---------- */
     
     /* ---------- Start of Posts routes ---------- */
     Route::resource('posts', 'PostsController');

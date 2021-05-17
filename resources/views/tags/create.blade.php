@@ -4,10 +4,10 @@
 
     <div class="card card-default">
         <div class="card-header">
-            @if (isset($category))
-                Edit Category
+            @if (isset($tag))
+                Edit Tag
             @else
-                Create Category
+                Create Tag
             @endif
         </div>
         <div class="card-body">
@@ -16,17 +16,17 @@
             @include('partial.errors')
             {{-- ---------- End of Form Errors ---------- --}}
 
-            <form action="{{ isset($category) ? url('/categories/' . $category->id) : url('/categories') }}" method="POST">
+            <form action="{{ isset($tag) ? url('/tags/' . $tag->id) : url('/tags') }}" method="POST">
                 @csrf
-                @if (isset($category))
+                @if (isset($tag))
                     @method('PUT')
                 @endif
                 <div class="form-group">
                     <label for="name">Name</label>
-                    <input id="name" class="form-control" type="text" name="name" value="{{ isset($category) ? $category->name : '' }}">
+                    <input id="name" class="form-control" type="text" name="name" value="{{ isset($tag) ? $tag->name : '' }}">
                 </div>
                 <div class="form-group">
-                    <button class="btn btn-success" type="submit">{{ isset($category) ? 'Update Category' : 'Create Category' }}</button>
+                    <button class="btn btn-success" type="submit">{{ isset($tag) ? 'Update Tag' : 'Create Tag' }}</button>
                 </div>
             </form>
         </div>

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Tag;
 use App\Category;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
@@ -34,5 +35,15 @@ class Post extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    /**
+     * Model relation belongsToMany tag
+     *
+     * @return void
+     */
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
     }
 }
