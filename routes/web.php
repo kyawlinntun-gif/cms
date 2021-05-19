@@ -43,3 +43,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/posts/trashed', 'PostsController@trashed');
     /* ---------- End of Trashed ---------- */
 });
+
+/* ---------- Start of Admin User ---------- */
+Route::middleware(['auth', 'isAdmin'])->group(function () {
+    Route::get('/users', 'UsersController@index');
+    Route::get('/users/{user}/make-admin', 'UsersController@makeAdmin');
+});
+/* ---------- End of Admin User ---------- */

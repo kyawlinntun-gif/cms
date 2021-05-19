@@ -67,7 +67,7 @@
                 @if (!$tags->isEmpty())
                 <div class="form-group">
                     <label for="tag_id">Tag</label>
-                    <select name="tag_id[]" id="tag_id" class="form-control" multiple>
+                    <select name="tag_id[]" id="tag_id" class="form-control tags-selector" multiple>
                         @foreach ($tags as $tag)
                             <option value="{{ $tag->id }}"
                                 @if (isset($post))
@@ -92,14 +92,26 @@
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/trix.css') }}">
     <link rel="stylesheet" href="{{ asset('css/flatpickr.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/select2.min.css') }}">
 @endsection
 
 @section('script')
+    <script src="{{ asset('js/jquery.min.js') }}"></script>
     <script src="{{ asset('js/trix.js') }}"></script>
     <script src="{{ asset('js/flatpickr') }}"></script>
+    <script src="{{ asset('js/select2.min.js') }}" defer></script>
     <script>
+
+        /* ---------- Start of Date picker js ---------- */
         flatpickr("#published_at", {
             enableTime: true
-        })
+        });
+        /* ---------- End of Date picker js ---------- */
+
+        /* ---------- Start of Select2 js ---------- */
+        $(document).ready(function() {
+            $('.tags-selector').select2();
+        });
+        /* ---------- End of Select2 js ---------- */
     </script>
 @endsection
