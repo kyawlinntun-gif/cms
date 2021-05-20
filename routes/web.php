@@ -14,9 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'WelcomeController@index');
 
 Auth::routes();
 
@@ -48,5 +46,7 @@ Route::group(['middleware' => 'auth'], function () {
 Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/users', 'UsersController@index');
     Route::get('/users/{user}/make-admin', 'UsersController@makeAdmin');
+    Route::get('/users/profile', 'UsersController@edit');
+    Route::put('/users/profile', 'UsersController@update');
 });
 /* ---------- End of Admin User ---------- */

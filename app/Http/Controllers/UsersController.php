@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Users\UpdateUsersRequest;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UsersController extends Controller
 {
@@ -19,6 +21,12 @@ class UsersController extends Controller
         ]);
     }
 
+    /**
+     * Change the admin role
+     *
+     * @param User $user
+     * @return void
+     */
     public function makeAdmin(User $user)
     {
         if (!$user->isAdmin()) {
@@ -29,4 +37,29 @@ class UsersController extends Controller
             return redirect(url('/users'));
         }
     }
+
+    /**
+     * Return the edit user value
+     *
+     * @return void
+     */
+    public function edit()
+    {
+        return view('users.edit', [
+            'user' => Auth::user()
+        ]);
+    }
+
+    public function update(UpdateUsersRequest $request)
+    {
+        Auth::user()->update([
+            'name' => $request->name,
+            'about' => $request->about,
+        ]);
+
+        session()->flash('success', 'User updated successfully!');
+
+        return redirect()->back();
+    }
+
 }
