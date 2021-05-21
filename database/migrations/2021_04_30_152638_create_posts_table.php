@@ -19,8 +19,10 @@ class CreatePostsTable extends Migration
             $table->string('description');
             $table->text('content');
             $table->string('image');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('category_id');
-            $table->foreign('category_id')->references('id')->on('categories');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->timestamp('published_at')->nullable();
             $table->timestamps();
         });
