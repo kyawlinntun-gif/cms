@@ -17,19 +17,11 @@ class WelcomeController extends Controller
     public function index()
     {
         // return request()->get('search');
-        
-        $search = request()->query('search');
-
-        if ($search) {
-            $posts = Post::where('title', 'like', "%{$search}%")->simplePaginate(3);
-        } else {
-            $posts = Post::simplePaginate(3);
-        }
 
         return view('welcome', [
             'categories' => Category::all(),
             'tags' => Tag::all(),
-            'posts' => $posts
+            'posts' => Post::searched()->simplePaginate(3)
         ]);
     }
 
@@ -47,37 +39,21 @@ class WelcomeController extends Controller
      */
     public function category(Category $category)
     {
-        $search = request()->query('search');
-
-        if ($search) {
-            $posts = $category->posts()->where('title', 'like', "%{$search}%")->simplePaginate(3);
-        } else {
-            $posts = $category->posts()->simplePaginate(3);
-        }
-
         return view('blog.category', [
             'category' => $category,
             'categories' => Category::all(),
             'tags' => Tag::all(),
-            'posts' => $posts
+            'posts' => $category->posts()->searched()->simplePaginate(3)
         ]);
     }
 
     public function tag(Tag $tag)
     {
-        $search = request()->query('search');
-
-        if ($search) {
-            $posts = $tag->posts()->where('title', 'like', "%{$search}%")->simplePaginate(3);
-        } else {
-            $posts = $tag->posts()->simplePaginate(3);
-        }
-
         return view('blog.tag', [
             'tag' => $tag,
             'categories' => Category::all(),
             'tags' => Tag::all(),
-            'posts' => $posts
+            'posts' => $tag->posts()->searched()->simplePaginate(3)
         ]);
     }
 }

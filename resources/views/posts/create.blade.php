@@ -104,7 +104,8 @@
 
         /* ---------- Start of Date picker js ---------- */
         flatpickr("#published_at", {
-            enableTime: true
+            enableTime: true,
+            enableSeconds: true
         });
         /* ---------- End of Date picker js ---------- */
 
